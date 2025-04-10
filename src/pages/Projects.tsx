@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MapPin, Users, Calendar, Heart, MessageSquare, Filter, Search } from "lucide-react";
 import ChatbotAssistant from "@/components/ChatbotAssistant";
+import { Link } from "react-router-dom";
 
 // Données fictives pour les projets
 const MOCK_PROJECTS = [
@@ -122,9 +123,11 @@ const Projects = () => {
                 <Filter size={18} className="mr-2" />
                 Filtrer
               </Button>
-              <Button className="bg-tokponla-primary hover:bg-tokponla-primary/90">
-                Proposer un projet
-              </Button>
+              <Link to="/create-project">
+                <Button className="bg-tokponla-primary hover:bg-tokponla-primary/90">
+                  Proposer un projet
+                </Button>
+              </Link>
             </div>
           </div>
 
@@ -176,14 +179,16 @@ const Projects = () => {
                   {MOCK_PROJECTS.map((project) => (
                     <Card key={project.id} className="overflow-hidden flex flex-col h-full">
                       <div className="relative">
-                        <img 
-                          src={project.image} 
-                          alt={project.title}
-                          className="w-full h-48 object-cover"
-                        />
-                        <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm font-medium">
-                          Score IA: {project.aiScore}/100
-                        </div>
+                        <Link to={`/projects/${project.id}`}>
+                          <img 
+                            src={project.image} 
+                            alt={project.title}
+                            className="w-full h-48 object-cover"
+                          />
+                          <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm font-medium">
+                            Score IA: {project.aiScore}/100
+                          </div>
+                        </Link>
                       </div>
                       <div className="p-5 flex-grow flex flex-col">
                         <div className="flex items-center text-muted-foreground text-sm mb-2">
@@ -192,7 +197,9 @@ const Projects = () => {
                           <span className="mx-2">•</span>
                           <span>{project.category}</span>
                         </div>
-                        <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+                        <Link to={`/projects/${project.id}`} className="hover:text-tokponla-primary transition-colors">
+                          <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+                        </Link>
                         <p className="text-muted-foreground mb-4 flex-grow">{project.description}</p>
                         
                         <div className="mb-4">
@@ -220,9 +227,11 @@ const Projects = () => {
                         </div>
                         
                         <div className="flex space-x-2">
-                          <Button className="flex-grow bg-tokponla-primary hover:bg-tokponla-primary/90">
-                            Contribuer
-                          </Button>
+                          <Link to={`/projects/${project.id}`} className="flex-grow">
+                            <Button className="w-full bg-tokponla-primary hover:bg-tokponla-primary/90">
+                              Contribuer
+                            </Button>
+                          </Link>
                           <Button variant="outline" size="icon">
                             <Heart size={18} />
                           </Button>

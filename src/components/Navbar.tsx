@@ -34,8 +34,8 @@ const Navbar = ({ toggleDarkMode, isDarkMode }: NavbarProps) => {
             <Link to="/projects" className="text-foreground hover:text-tokponla-primary transition-colors">
               Projets
             </Link>
-            <Link to="/map" className="text-foreground hover:text-tokponla-primary transition-colors">
-              Carte
+            <Link to="/create-project" className="text-foreground hover:text-tokponla-primary transition-colors">
+              Proposer un projet
             </Link>
             <Link to="/about" className="text-foreground hover:text-tokponla-primary transition-colors">
               À propos
@@ -90,11 +90,11 @@ const Navbar = ({ toggleDarkMode, isDarkMode }: NavbarProps) => {
                 Projets
               </Link>
               <Link
-                to="/map"
+                to="/create-project"
                 className="text-foreground hover:text-tokponla-primary transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Carte
+                Proposer un projet
               </Link>
               <Link
                 to="/about"
