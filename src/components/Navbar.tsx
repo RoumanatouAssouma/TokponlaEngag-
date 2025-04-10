@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Moon, Sun, Menu, X, User, Bell, Search } from "lucide-react";
+import { Moon, Sun, Menu, X, Bell, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface NavbarProps {
@@ -62,10 +62,11 @@ const Navbar = ({ toggleDarkMode, isDarkMode }: NavbarProps) => {
             <Button variant="ghost" size="icon" className="text-foreground">
               <Bell size={20} />
             </Button>
-            <Button variant="default" className="bg-tokponla-primary hover:bg-tokponla-primary/90">
-              <User size={18} className="mr-2" />
-              <span className="hidden sm:inline-block">Connexion</span>
-            </Button>
+            <Link to="/login">
+              <Button variant="default" className="bg-tokponla-primary hover:bg-tokponla-primary/90">
+                Connexion
+              </Button>
+            </Link>
             <Button
               variant="ghost"
               size="icon"
@@ -110,6 +111,15 @@ const Navbar = ({ toggleDarkMode, isDarkMode }: NavbarProps) => {
                   className="w-full pl-9 pr-4 py-2 text-sm rounded-full border border-input bg-background"
                 />
               </div>
+              <Link 
+                to="/register" 
+                className="mt-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Button variant="outline" className="w-full">
+                  S'inscrire
+                </Button>
+              </Link>
             </div>
           </div>
         )}
