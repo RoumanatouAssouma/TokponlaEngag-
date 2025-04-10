@@ -40,12 +40,16 @@ const PROJECT = {
   daysLeft: 23,
   startDate: "2025-03-15",
   endDate: "2025-05-15",
-  image: "/placeholder.svg",
-  gallery: ["/placeholder.svg", "/placeholder.svg", "/placeholder.svg"],
+  image: "/images/projects/park-renovation.jpg",
+  gallery: [
+    "/images/projects/park-renovation.jpg", 
+    "/images/projects/park-playground.jpg", 
+    "/images/projects/park-benches.jpg"
+  ],
   aiScore: 85,
   organization: {
     name: "Association pour un Bénin Vert",
-    logo: "/placeholder.svg",
+    logo: "/images/organizations/benin-vert-logo.jpg",
     verified: true,
     projects: 12,
     description: "Association à but non lucratif fondée en 2018, dédiée à l'amélioration des espaces verts urbains et à la sensibilisation environnementale.",
@@ -182,7 +186,7 @@ const ProjectDetail = () => {
                   </Avatar>
                   <span className="text-sm">{PROJECT.organization.name}</span>
                   {PROJECT.organization.verified && (
-                    <Award size={16} className="ml-1 text-tokponla-primary" />
+                    <Award size={16} className="ml-1 text-tokponla-primary" aria-label="Organisation vérifiée" />
                   )}
                 </div>
                 <div className="bg-black/10 dark:bg-white/10 text-foreground px-3 py-1 rounded-full text-xs">
@@ -444,7 +448,7 @@ const ProjectDetail = () => {
                     <div className="flex items-center">
                       <h4 className="font-medium">{PROJECT.organization.name}</h4>
                       {PROJECT.organization.verified && (
-                        <Award size={16} className="ml-1 text-tokponla-primary" title="Organisation vérifiée" />
+                        <Award size={16} className="ml-1 text-tokponla-primary" aria-label="Organisation vérifiée" />
                       )}
                     </div>
                     <p className="text-xs text-muted-foreground">{PROJECT.organization.projects} projets réalisés</p>

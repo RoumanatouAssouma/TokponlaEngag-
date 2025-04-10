@@ -23,7 +23,7 @@ const MOCK_PROJECTS = [
     goalAmount: 5000000,
     supporters: 47,
     daysLeft: 23,
-    image: "/placeholder.svg",
+    image: "/images/projects/park-renovation.jpg",
     aiScore: 85,
   },
   {
@@ -36,7 +36,7 @@ const MOCK_PROJECTS = [
     goalAmount: 3000000,
     supporters: 32,
     daysLeft: 15,
-    image: "/placeholder.svg",
+    image: "/images/projects/water-access.jpg",
     aiScore: 92,
   },
   {
@@ -49,7 +49,7 @@ const MOCK_PROJECTS = [
     goalAmount: 2000000,
     supporters: 18,
     daysLeft: 35,
-    image: "/placeholder.svg",
+    image: "/images/projects/digital-literacy.jpg",
     aiScore: 78,
   },
   {
@@ -62,7 +62,7 @@ const MOCK_PROJECTS = [
     goalAmount: 7000000,
     supporters: 68,
     daysLeft: 12,
-    image: "/placeholder.svg",
+    image: "/images/projects/health-center.jpg",
     aiScore: 94,
   },
   {
@@ -75,7 +75,7 @@ const MOCK_PROJECTS = [
     goalAmount: 2500000,
     supporters: 29,
     daysLeft: 18,
-    image: "/placeholder.svg",
+    image: "/images/projects/solar-school.jpg",
     aiScore: 89,
   },
   {
@@ -88,7 +88,7 @@ const MOCK_PROJECTS = [
     goalAmount: 1500000,
     supporters: 23,
     daysLeft: 28,
-    image: "/placeholder.svg",
+    image: "/images/projects/waste-management.jpg",
     aiScore: 81,
   }
 ];
@@ -184,6 +184,9 @@ const Projects = () => {
                             src={project.image} 
                             alt={project.title}
                             className="w-full h-48 object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = "/placeholder.svg";
+                            }}
                           />
                           <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm font-medium">
                             Score IA: {project.aiScore}/100

@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useCallback, ChangeEvent } from "react";
 import { useTheme } from "@/components/ThemeProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -27,7 +27,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useToast } from "@/components/ui/use-toast";
-import { ImagePlus, Upload, MapPin } from "lucide-react";
+import { ImagePlus, Upload, MapPin, X, FileIcon } from "lucide-react";
 import ChatbotAssistant from "@/components/ChatbotAssistant";
 
 // Validation schema for project creation
@@ -52,12 +52,38 @@ const projectSchema = z.object({
   }),
 });
 
+// Fonction pour obtenir le type d'icône en fonction de l'extension du fichier
+const getFileIcon = (fileName: string) => {
+  const extension = fileName.split('.').pop()?.toLowerCase();
+  switch (extension) {
+    case 'pdf':
+      return 'pdf';
+    case 'doc':
+    case 'docx':
+      return 'doc';
+    case 'xls':
+    case 'xlsx':
+      return 'excel';
+    case 'jpg':
+    case 'jpeg':
+    case 'png':
+    case 'gif':
+      return 'image';
+    default:
+      return 'file';
+  }
+};
+
 const CreateProject = () => {
   const { toggleTheme, isDarkMode } = useTheme();
   const { toast } = useToast();
+  
   const [coverImage, setCoverImage] = useState<File | null>(null);
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
+  const [additionalImages, setAdditionalImages] = useState<File[]>([]);
+  const [imagesPreviews, setImagesPreviews] = useState<string[]>([]);
   const [attachments, setAttachments] = useState<File[]>([]);
+  const [dragActive, setDragActive] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof projectSchema>>({
     resolver: zodResolver(projectSchema),
@@ -71,25 +97,184 @@ const CreateProject = () => {
     },
   });
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCoverImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      
+      // Vérifier le type et la taille du fichier
+      if (!file.type.includes('image/')) {
+        toast({
+          title: "Format invalide",
+          description: "Veuillez sélectionner un fichier image (JPG, PNG, etc.)",
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      if (file.size > 5 * 1024 * 1024) { // 5MB
+        toast({
+          title: "Fichier trop volumineux",
+          description: "L'image ne doit pas dépasser 5 MB",
+          variant: "destructive"
+        });
+        return;
+      }
+      
       setCoverImage(file);
       setCoverPreview(URL.createObjectURL(file));
+      
+      toast({
+        title: "Image ajoutée",
+        description: "L'image de couverture a été ajoutée avec succès.",
+      });
     }
   };
 
-  const handleAttachmentsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAdditionalImagesChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const fileArray = Array.from(e.target.files);
-      setAttachments((prev) => [...prev, ...fileArray]);
+      
+      // Vérifier les fichiers
+      const validFiles = fileArray.filter(file => {
+        if (!file.type.includes('image/')) {
+          toast({
+            title: "Format invalide",
+            description: `${file.name} n'est pas une image`,
+            variant: "destructive"
+          });
+          return false;
+        }
+        
+        if (file.size > 5 * 1024 * 1024) {
+          toast({
+            title: "Fichier trop volumineux",
+            description: `${file.name} dépasse 5 MB`,
+            variant: "destructive"
+          });
+          return false;
+        }
+        
+        return true;
+      });
+      
+      if (validFiles.length > 0) {
+        setAdditionalImages(prev => [...prev, ...validFiles]);
+        
+        // Créer les URLs pour les aperçus
+        const newImageUrls = validFiles.map(file => URL.createObjectURL(file));
+        setImagesPreviews(prev => [...prev, ...newImageUrls]);
+        
+        toast({
+          title: "Images ajoutées",
+          description: `${validFiles.length} image(s) ajoutée(s) à la galerie.`,
+        });
+      }
     }
   };
+
+  const handleAttachmentsChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const fileArray = Array.from(e.target.files);
+      
+      // Vérifier les fichiers
+      const validFiles = fileArray.filter(file => {
+        if (file.size > 10 * 1024 * 1024) { // 10MB
+          toast({
+            title: "Fichier trop volumineux",
+            description: `${file.name} dépasse 10 MB`,
+            variant: "destructive"
+          });
+          return false;
+        }
+        return true;
+      });
+      
+      if (validFiles.length > 0) {
+        setAttachments(prev => [...prev, ...validFiles]);
+        toast({
+          title: "Documents ajoutés",
+          description: `${validFiles.length} document(s) ajouté(s) avec succès.`,
+        });
+      }
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setAdditionalImages(prev => prev.filter((_, i) => i !== index));
+    
+    // Libérer l'URL de l'aperçu pour éviter les fuites de mémoire
+    URL.revokeObjectURL(imagesPreviews[index]);
+    setImagesPreviews(prev => prev.filter((_, i) => i !== index));
+    
+    toast({
+      title: "Image supprimée",
+      description: "L'image a été retirée de la galerie.",
+    });
+  };
+
+  const removeCoverImage = () => {
+    if (coverPreview) {
+      URL.revokeObjectURL(coverPreview);
+    }
+    setCoverImage(null);
+    setCoverPreview(null);
+    
+    toast({
+      title: "Image supprimée",
+      description: "L'image de couverture a été supprimée.",
+    });
+  };
+
+  // Gestionnaires pour le drag and drop
+  const handleDrag = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent, type: 'cover' | 'gallery' | 'attachments') => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      if (type === 'cover' && e.dataTransfer.files[0]) {
+        // Simuler le changement d'image de couverture
+        const event = {
+          target: {
+            files: [e.dataTransfer.files[0]]
+          }
+        } as unknown as ChangeEvent<HTMLInputElement>;
+        handleCoverImageChange(event);
+      } else if (type === 'gallery') {
+        // Simuler le changement d'images additionnelles
+        const event = {
+          target: {
+            files: e.dataTransfer.files
+          }
+        } as unknown as ChangeEvent<HTMLInputElement>;
+        handleAdditionalImagesChange(event);
+      } else if (type === 'attachments') {
+        // Simuler le changement de pièces jointes
+        const event = {
+          target: {
+            files: e.dataTransfer.files
+          }
+        } as unknown as ChangeEvent<HTMLInputElement>;
+        handleAttachmentsChange(event);
+      }
+    }
+  }, [handleCoverImageChange, handleAdditionalImagesChange, handleAttachmentsChange]);
 
   const onSubmit = (values: z.infer<typeof projectSchema>) => {
     // Dans une vraie application, nous enverrions les données au serveur ici
     console.log("Données du formulaire:", values);
     console.log("Image de couverture:", coverImage);
+    console.log("Images additionnelles:", additionalImages);
     console.log("Pièces jointes:", attachments);
 
     toast({
@@ -97,10 +282,19 @@ const CreateProject = () => {
       description: "Votre projet est en cours d'examen. Vous serez notifié une fois approuvé.",
     });
 
+    // Libérer les URLs des aperçus
+    if (coverPreview) {
+      URL.revokeObjectURL(coverPreview);
+    }
+    
+    imagesPreviews.forEach(url => URL.revokeObjectURL(url));
+
     // Réinitialiser le formulaire après la soumission
     form.reset();
     setCoverImage(null);
     setCoverPreview(null);
+    setAdditionalImages([]);
+    setImagesPreviews([]);
     setAttachments([]);
   };
 
@@ -164,7 +358,14 @@ const CreateProject = () => {
 
                     <div className="mb-4">
                       <Label htmlFor="coverImage">Image de couverture</Label>
-                      <div className="mt-1 border-2 border-dashed border-border rounded-lg p-6 text-center cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => document.getElementById('coverImage')?.click()}>
+                      <div 
+                        className={`mt-1 border-2 ${dragActive ? 'border-tokponla-primary bg-tokponla-primary/5' : 'border-dashed border-border'} rounded-lg p-6 text-center cursor-pointer hover:bg-muted/50 transition-colors`}
+                        onClick={() => document.getElementById('coverImage')?.click()}
+                        onDragEnter={(e) => handleDrag(e)}
+                        onDragOver={(e) => handleDrag(e)}
+                        onDragLeave={(e) => handleDrag(e)}
+                        onDrop={(e) => handleDrop(e, 'cover')}
+                      >
                         {coverPreview ? (
                           <div className="relative">
                             <img src={coverPreview} alt="Aperçu" className="max-h-[200px] mx-auto rounded-md" />
@@ -175,17 +376,16 @@ const CreateProject = () => {
                               className="absolute top-2 right-2"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setCoverImage(null);
-                                setCoverPreview(null);
+                                removeCoverImage();
                               }}
                             >
-                              Supprimer
+                              <X size={16} className="mr-1" /> Supprimer
                             </Button>
                           </div>
                         ) : (
                           <div className="flex flex-col items-center justify-center">
                             <ImagePlus className="h-12 w-12 text-muted-foreground mb-2" />
-                            <p className="text-muted-foreground">Cliquez pour ajouter une image de couverture</p>
+                            <p className="text-muted-foreground">Cliquez ou déposez une image de couverture</p>
                             <p className="text-xs text-muted-foreground mt-1">PNG, JPG ou WEBP (max. 5MB)</p>
                           </div>
                         )}
@@ -194,9 +394,59 @@ const CreateProject = () => {
                           type="file" 
                           className="hidden" 
                           accept="image/*"
-                          onChange={handleImageChange}
+                          onChange={handleCoverImageChange}
                         />
                       </div>
+                    </div>
+                    
+                    {/* Galerie d'images (nouvelle section) */}
+                    <div className="mb-4">
+                      <Label htmlFor="additionalImages">Images du projet (optionnel)</Label>
+                      <div 
+                        className={`mt-1 border-2 ${dragActive ? 'border-tokponla-primary bg-tokponla-primary/5' : 'border-dashed border-border'} rounded-lg p-6 text-center cursor-pointer hover:bg-muted/50 transition-colors`}
+                        onClick={() => document.getElementById('additionalImages')?.click()}
+                        onDragEnter={(e) => handleDrag(e)}
+                        onDragOver={(e) => handleDrag(e)}
+                        onDragLeave={(e) => handleDrag(e)}
+                        onDrop={(e) => handleDrop(e, 'gallery')}
+                      >
+                        <div className="flex flex-col items-center justify-center">
+                          <ImagePlus className="h-12 w-12 text-muted-foreground mb-2" />
+                          <p className="text-muted-foreground">Ajoutez des images supplémentaires de votre projet</p>
+                          <p className="text-xs text-muted-foreground mt-1">PNG, JPG ou WEBP (max. 5MB)</p>
+                        </div>
+                        <Input 
+                          id="additionalImages" 
+                          type="file" 
+                          multiple 
+                          className="hidden" 
+                          accept="image/*"
+                          onChange={handleAdditionalImagesChange}
+                        />
+                      </div>
+                      
+                      {imagesPreviews.length > 0 && (
+                        <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-2">
+                          {imagesPreviews.map((imgUrl, index) => (
+                            <div key={index} className="relative h-32 rounded-md overflow-hidden border border-border">
+                              <img 
+                                src={imgUrl} 
+                                alt={`Image ${index + 1}`} 
+                                className="w-full h-full object-cover"
+                              />
+                              <Button 
+                                type="button" 
+                                variant="destructive" 
+                                size="icon" 
+                                className="absolute top-1 right-1 h-6 w-6"
+                                onClick={() => removeImage(index)}
+                              >
+                                <X size={14} />
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -295,12 +545,16 @@ const CreateProject = () => {
                     <div className="mb-4">
                       <Label htmlFor="attachments">Pièces jointes (optionnel)</Label>
                       <div 
-                        className="mt-1 border-2 border-dashed border-border rounded-lg p-6 text-center cursor-pointer hover:bg-muted/50 transition-colors"
+                        className={`mt-1 border-2 ${dragActive ? 'border-tokponla-primary bg-tokponla-primary/5' : 'border-dashed border-border'} rounded-lg p-6 text-center cursor-pointer hover:bg-muted/50 transition-colors`}
                         onClick={() => document.getElementById('attachments')?.click()}
+                        onDragEnter={(e) => handleDrag(e)}
+                        onDragOver={(e) => handleDrag(e)}
+                        onDragLeave={(e) => handleDrag(e)}
+                        onDrop={(e) => handleDrop(e, 'attachments')}
                       >
                         <div className="flex flex-col items-center justify-center">
                           <Upload className="h-12 w-12 text-muted-foreground mb-2" />
-                          <p className="text-muted-foreground">Cliquez pour ajouter des documents</p>
+                          <p className="text-muted-foreground">Cliquez ou déposez des documents ici</p>
                           <p className="text-xs text-muted-foreground mt-1">PDF, DOC, XLS (max. 10MB)</p>
                         </div>
                         <Input 
@@ -316,10 +570,18 @@ const CreateProject = () => {
                       {attachments.length > 0 && (
                         <div className="mt-4">
                           <p className="text-sm font-medium mb-2">Documents téléchargés:</p>
-                          <ul className="space-y-1">
+                          <ul className="space-y-2">
                             {attachments.map((file, index) => (
-                              <li key={index} className="text-sm flex justify-between items-center p-2 bg-muted rounded">
-                                <span>{file.name}</span>
+                              <li key={index} className="text-sm flex justify-between items-center p-3 bg-muted rounded">
+                                <div className="flex items-center">
+                                  <div className="p-2 bg-tokponla-primary/10 text-tokponla-primary rounded mr-3">
+                                    <FileIcon size={18} />
+                                  </div>
+                                  <div>
+                                    <p className="font-medium truncate max-w-[180px] sm:max-w-[300px]">{file.name}</p>
+                                    <p className="text-xs text-muted-foreground">{(file.size / 1024).toFixed(1)} KB</p>
+                                  </div>
+                                </div>
                                 <Button 
                                   type="button"
                                   variant="ghost" 
