@@ -23,7 +23,7 @@ const MOCK_PROJECTS = [
     goalAmount: 5000000,
     supporters: 47,
     daysLeft: 23,
-    image: "/images/projects/park-renovation.jpg",
+    image: "/images/park-renovation.jpg",
     aiScore: 85,
   },
   {
@@ -36,7 +36,7 @@ const MOCK_PROJECTS = [
     goalAmount: 3000000,
     supporters: 32,
     daysLeft: 15,
-    image: "/images/projects/water-access.jpg",
+    image: "/images/water-access.jpg",
     aiScore: 92,
   },
   {
@@ -49,7 +49,7 @@ const MOCK_PROJECTS = [
     goalAmount: 2000000,
     supporters: 18,
     daysLeft: 35,
-    image: "/images/projects/digital-literacy.jpg",
+    image: "/images/digital-literacy.jpg",
     aiScore: 78,
   },
   {
@@ -62,7 +62,7 @@ const MOCK_PROJECTS = [
     goalAmount: 7000000,
     supporters: 68,
     daysLeft: 12,
-    image: "/images/projects/health-center.jpg",
+    image: "/images/health-center.jpg",
     aiScore: 94,
   },
   {
@@ -75,7 +75,7 @@ const MOCK_PROJECTS = [
     goalAmount: 2500000,
     supporters: 29,
     daysLeft: 18,
-    image: "/images/projects/solar-school.jpg",
+    image: "/images/solar-school.jpg",
     aiScore: 89,
   },
   {
@@ -88,7 +88,7 @@ const MOCK_PROJECTS = [
     goalAmount: 1500000,
     supporters: 23,
     daysLeft: 28,
-    image: "/images/projects/waste-management.jpg",
+    image: "/images/waste-management.jpg",
     aiScore: 81,
   }
 ];
@@ -103,10 +103,42 @@ const calculateProgress = (raised: number, goal: number) => {
   return Math.min(Math.round((raised / goal) * 100), 100);
 };
 
+// Fonction pour obtenir une image de secours pour les projets sans image
+const getPlaceholderImage = (category: string) => {
+  switch (category.toLowerCase()) {
+    case 'environnement':
+      return "/images/environment-placeholder.jpg";
+    case 'infrastructure':
+      return "/images/infrastructure-placeholder.jpg";
+    case 'éducation':
+      return "/images/education-placeholder.jpg";
+    case 'santé':
+      return "/images/health-placeholder.jpg";
+    case 'énergie':
+      return "/images/energy-placeholder.jpg";
+    default:
+      return "/placeholder.svg";
+  }
+};
+
 const Projects = () => {
   const { toggleTheme, isDarkMode } = useTheme();
   const [searchQuery, setSearchQuery] = useState("");
   const [currentView, setCurrentView] = useState("list");
+  const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({});
+
+  // Gérer les erreurs d'image
+  const handleImageError = (projectId: number) => {
+    setImageErrors(prev => ({ ...prev, [projectId]: true }));
+  };
+
+  // Obtenir l'URL d'image en tenant compte des erreurs
+  const getImageUrl = (project: any) => {
+    if (imageErrors[project.id]) {
+      return getPlaceholderImage(project.category);
+    }
+    return project.image;
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -180,14 +212,15 @@ const Projects = () => {
                     <Card key={project.id} className="overflow-hidden flex flex-col h-full">
                       <div className="relative">
                         <Link to={`/projects/${project.id}`}>
-                          <img 
-                            src={project.image} 
-                            alt={project.title}
-                            className="w-full h-48 object-cover"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = "/placeholder.svg";
-                            }}
-                          />
+                          <div className="w-full h-48 bg-muted">
+                            <img 
+                              src={getImageUrl(project)} 
+                              alt={project.title}
+                              className="w-full h-full object-cover"
+                              onError={() => handleImageError(project.id)}
+                              loading="lazy"
+                            />
+                          </div>
                           <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm font-medium">
                             Score IA: {project.aiScore}/100
                           </div>

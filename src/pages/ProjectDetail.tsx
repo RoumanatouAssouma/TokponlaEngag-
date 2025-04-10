@@ -40,16 +40,16 @@ const PROJECT = {
   daysLeft: 23,
   startDate: "2025-03-15",
   endDate: "2025-05-15",
-  image: "/images/projects/park-renovation.jpg",
+  image: "/images/park-renovation.jpg",
   gallery: [
-    "/images/projects/park-renovation.jpg", 
-    "/images/projects/park-playground.jpg", 
-    "/images/projects/park-benches.jpg"
+    "/images/park-renovation.jpg", 
+    "/images/park-playground.jpg", 
+    "/images/park-benches.jpg"
   ],
   aiScore: 85,
   organization: {
     name: "Association pour un Bénin Vert",
-    logo: "/images/organizations/benin-vert-logo.jpg",
+    logo: "/images/benin-vert-logo.jpg",
     verified: true,
     projects: 12,
     description: "Association à but non lucratif fondée en 2018, dédiée à l'amélioration des espaces verts urbains et à la sensibilisation environnementale.",
@@ -116,6 +116,24 @@ const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString('fr-FR', options);
 };
 
+// Fonction pour gérer les erreurs d'image et fournir un fallback
+const getPlaceholderForImage = (category: string) => {
+  switch (category.toLowerCase()) {
+    case 'environnement':
+      return "/images/environment-placeholder.jpg";
+    case 'infrastructure':
+      return "/images/infrastructure-placeholder.jpg";
+    case 'éducation':
+      return "/images/education-placeholder.jpg";
+    case 'santé':
+      return "/images/health-placeholder.jpg";
+    case 'énergie':
+      return "/images/energy-placeholder.jpg";
+    default:
+      return "/placeholder.svg";
+  }
+};
+
 const ProjectDetail = () => {
   const { toggleTheme, isDarkMode } = useTheme();
   const { projectId } = useParams();
@@ -123,6 +141,7 @@ const ProjectDetail = () => {
   const [likedProject, setLikedProject] = useState(false);
   const [selectedImage, setSelectedImage] = useState(PROJECT.image);
   const { toast } = useToast();
+  const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
 
   // Dans une vraie application, nous chargerions les données du projet en fonction de l'ID
   // const { data: project, isLoading, error } = useQuery({
@@ -163,6 +182,30 @@ const ProjectDetail = () => {
     });
   };
 
+  // Gérer les erreurs d'image
+  const handleImageError = (imageUrl: string) => {
+    setImageErrors(prev => ({ ...prev, [imageUrl]: true }));
+    
+    // Si l'image sélectionnée a échoué, définir la première disponible
+    if (imageUrl === selectedImage) {
+      const availableImage = PROJECT.gallery.find(img => !imageErrors[img]) || PROJECT.image;
+      if (!imageErrors[availableImage]) {
+        setSelectedImage(availableImage);
+      } else {
+        // Si toutes les images ont échoué, utiliser l'image par défaut
+        setSelectedImage(getPlaceholderForImage(PROJECT.category));
+      }
+    }
+  };
+
+  // Obtenir l'URL d'image en tenant compte des erreurs
+  const getImageUrl = (imageUrl: string) => {
+    if (imageErrors[imageUrl]) {
+      return getPlaceholderForImage(PROJECT.category);
+    }
+    return imageUrl;
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar toggleDarkMode={toggleTheme} isDarkMode={isDarkMode} />
@@ -181,7 +224,11 @@ const ProjectDetail = () => {
               <div className="flex items-center">
                 <div className="flex items-center mr-4">
                   <Avatar className="h-6 w-6 mr-2">
-                    <AvatarImage src={PROJECT.organization.logo} alt={PROJECT.organization.name} />
+                    <AvatarImage 
+                      src={PROJECT.organization.logo} 
+                      alt={PROJECT.organization.name} 
+                      onError={() => setImageErrors(prev => ({ ...prev, [PROJECT.organization.logo]: true }))}
+                    />
                     <AvatarFallback>{PROJECT.organization.name.substring(0, 2)}</AvatarFallback>
                   </Avatar>
                   <span className="text-sm">{PROJECT.organization.name}</span>
@@ -219,9 +266,11 @@ const ProjectDetail = () => {
               <Card className="overflow-hidden">
                 <div className="aspect-video bg-muted">
                   <img 
-                    src={selectedImage} 
+                    src={getImageUrl(selectedImage)} 
                     alt={PROJECT.title} 
                     className="w-full h-full object-cover"
+                    onError={() => handleImageError(selectedImage)}
+                    loading="lazy"
                   />
                 </div>
                 <div className="p-4 flex space-x-2 overflow-x-auto">
@@ -230,9 +279,11 @@ const ProjectDetail = () => {
                     onClick={() => setSelectedImage(PROJECT.image)}
                   >
                     <img 
-                      src={PROJECT.image} 
+                      src={getImageUrl(PROJECT.image)} 
                       alt="Principale" 
                       className="w-full h-full object-cover rounded-sm"
+                      onError={() => handleImageError(PROJECT.image)}
+                      loading="lazy"
                     />
                   </div>
                   {PROJECT.gallery.map((img, index) => (
@@ -242,9 +293,11 @@ const ProjectDetail = () => {
                       onClick={() => setSelectedImage(img)}
                     >
                       <img 
-                        src={img} 
+                        src={getImageUrl(img)} 
                         alt={`Image ${index + 1}`} 
                         className="w-full h-full object-cover rounded-sm"
+                        onError={() => handleImageError(img)}
+                        loading="lazy"
                       />
                     </div>
                   ))}
