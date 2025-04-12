@@ -53,7 +53,7 @@ const ChatbotAssistant = () => {
     <>
       {/* Chatbot Button */}
       <Button
-        className="fixed bottom-6 right-6 rounded-full h-14 w-14 p-0 shadow-lg bg-blue-950 hover:bg-tokponla-primary/90"
+        className="fixed bottom-6 right-6 rounded-full h-14 w-14 p-0 shadow-lg bg-yellow-600 hover:bg-yellow-800"
         onClick={toggleChatbot}
       >
         {isOpen ? (

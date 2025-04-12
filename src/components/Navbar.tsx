@@ -17,10 +17,9 @@ const Navbar = ({ toggleDarkMode, isDarkMode }: NavbarProps) => {
   };
 
   return (
-    <nav className="bg-gradient-to-r from-blue-950 via-blue-700 to-blue-500 border-b border-border sticky top-0 z-50 shadow-md">
+    <nav className="bg-gradient-to-r from-blue-950 via-blue-700 to-blue-500 border-b sticky top-0 z-50 shadow-md">
       <div className="tokponla-container py-4">
         <div className="flex justify-between items-center">
-          {/* Logo + Desktop Nav */}
           <div className="flex items-center space-x-8">
             <Link to="/" className="flex items-center space-x-2">
               <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-full shadow-lg">
@@ -32,19 +31,19 @@ const Navbar = ({ toggleDarkMode, isDarkMode }: NavbarProps) => {
             </Link>
 
             {/* Desktop Links */}
-            <div className="hidden md:flex items-center space-x-4">
+            <div className="hidden md:flex items-center ">
               <Link to="/projects">
-                <Button variant="ghost" className="text-foreground hover:text-tokponla-primary hover:bg-tokponla-primary/10 rounded-md px-3 py-3 font-medium">
+                <Button variant="ghost" className="text-foreground text-lg hover:text-tokponla-primary hover:bg-tokponla-primary/10 rounded-md px-3 py-3 font-medium">
                   Projets
                 </Button>
               </Link>
               <Link to="/create-project">
-                <Button variant="ghost" className="text-foreground hover:text-tokponla-primary hover:bg-tokponla-primary/10 rounded-md px-3 py-3 font-medium">
+                <Button variant="ghost" className="text-foreground text-lg hover:text-tokponla-primary hover:bg-tokponla-primary/10 rounded-md px-3 py-3 font-medium">
                   Proposer un projet
                 </Button>
               </Link>
               <Link to="/about">
-                <Button variant="ghost" className="text-foreground hover:text-tokponla-primary hover:bg-tokponla-primary/10 rounded-md px-3 py-3 font-medium">
+                <Button variant="ghost" className="text-foreground text-lg hover:text-tokponla-primary hover:bg-tokponla-primary/10 rounded-md px-3 py-3 font-medium">
                   À propos
                 </Button>
               </Link>
