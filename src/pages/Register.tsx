@@ -199,11 +199,11 @@ const Register = () => {
                 />
                 <Label htmlFor="agreeTerms" className="text-sm">
                   J'accepte les{" "}
-                  <Link to="/terms" className="text-tokponla-primary hover:underline">
+                  <Link to="/terms" className="text-blue-600 hover:underline">
                     conditions d'utilisation
                   </Link>{" "}
                   et la{" "}
-                  <Link to="/privacy" className="text-tokponla-primary hover:underline">
+                  <Link to="/privacy" className="text-blue-600 hover:underline">
                     politique de confidentialité
                   </Link>
                 </Label>
@@ -211,7 +211,7 @@ const Register = () => {
 
               <Button
                 type="submit"
-                className="w-full bg-tokponla-primary hover:bg-tokponla-primary/90"
+                className="w-full bg-blue-950 hover:bg-tokponla-primary/90"
                 disabled={!formData.agreeTerms}
               >
                 S'inscrire
@@ -247,7 +247,7 @@ const Register = () => {
               <div className="text-center mt-4">
                 <p className="text-sm text-muted-foreground">
                   Vous avez déjà un compte?{" "}
-                  <Link to="/login" className="text-tokponla-primary hover:underline">
+                  <Link to="/login" className="text-blue-600 hover:underline font-bold">
                     Se connecter
                   </Link>
                 </p>

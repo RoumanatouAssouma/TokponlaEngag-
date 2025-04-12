@@ -107,14 +107,14 @@ const Login = () => {
                     Se souvenir de moi
                   </Label>
                 </div>
-                <Link to="/forgot-password" className="text-sm text-tokponla-primary hover:underline">
+                <Link to="/forgot-password" className="text-sm text-blue-600 hover:underline font-bold">
                   Mot de passe oublié?
                 </Link>
               </div>
 
               <Button
                 type="submit"
-                className="w-full bg-tokponla-primary hover:bg-tokponla-primary/90"
+                className="w-full bg-blue-950 hover:bg-tokponla-primary"
               >
                 Se connecter
               </Button>
@@ -124,7 +124,7 @@ const Login = () => {
                   <div className="w-full border-t border-border"></div>
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">Ou continuer avec</span>
+                  <span className="bg-background px-2 text-black">Ou continuer avec</span>
                 </div>
               </div>
 
@@ -147,9 +147,9 @@ const Login = () => {
               </div>
 
               <div className="text-center mt-4">
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-black">
                   Pas encore de compte?{" "}
-                  <Link to="/register" className="text-tokponla-primary hover:underline">
+                  <Link to="/register" className="text-blue-600 font-bold hover:underline">
                     S'inscrire
                   </Link>
                 </p>

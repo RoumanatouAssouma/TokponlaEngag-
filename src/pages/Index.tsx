@@ -1,7 +1,7 @@
 
 import { useTheme } from "@/components/ThemeProvider";
 import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
+import Hero from "@/components/Accueil";
 import Features from "@/components/Features";
 import DashboardPreviews from "@/components/DashboardPreviews";
 import ChatbotAssistant from "@/components/ChatbotAssistant";

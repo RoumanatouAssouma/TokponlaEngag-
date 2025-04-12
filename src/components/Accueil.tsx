@@ -5,31 +5,35 @@ import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
-    <div className="relative bg-gradient-to-br from-background to-muted overflow-hidden">
+    <div className="relative from-background to-muted overflow-hidden">
       <div className="tokponla-container py-12 md:py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <div className="inline-block px-3 py-1 rounded-full bg-tokponla-light dark:bg-tokponla-dark/50 text-tokponla-primary text-sm font-medium">
+            <div className="inline-block px-3 py-1 rounded-full bg-yellow-600 dark:bg-tokponla-dark/50 text-white text-sm font-medium">
               Propulsé par l'IA pour l'Engagement Citoyen
             </div>
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
               Transformez votre communauté avec{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-tokponla-primary via-tokponla-secondary to-tokponla-accent">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-800 via-orange-400 to-blue-950">
                 TokponlaEngagé
               </span>
             </h1>
-            <p className="text-lg text-muted-foreground md:pr-10">
+            <p className="text-lg md:pr-10">
               Une plateforme intelligente qui connecte les citoyens, les ONG et les administrateurs pour
               créer un impact positif dans les communautés urbaines africaines.
             </p>
             <div className="flex flex-wrap gap-4 pt-2">
-              <Button className="tokponla-btn-primary">
-                Explorer les projets
-                <ArrowRight size={16} className="ml-2" />
-              </Button>
-              <Button variant="outline" className="tokponla-btn-outline">
+              <Link to="/projects">
+                <Button className="bg-blue-950">
+                  Explorer les projets
+                  <ArrowRight size={16} className="ml-2" />
+                </Button>
+              </Link>
+              <Link to="/about">
+                <Button variant="outline" className="bg-yellow-600">
                 Comment ça marche
               </Button>
+              </Link>
             </div>
             <div className="flex flex-wrap items-center gap-4 pt-2 text-sm text-muted-foreground">
               <div className="flex items-center">
@@ -66,8 +70,8 @@ const Hero = () => {
                     </div>
                     <div className="flex-1">
                       <div className="flex justify-between items-start">
-                        <h4 className="font-medium">Rénovation du parc central</h4>
-                        <span className="text-xs px-2 py-1 bg-tokponla-success/10 text-tokponla-success rounded-full">
+                        <h4 className="font-medium">Rénovation du parc municipal</h4>
+                        <span className="text-xs px-2 py-1 bg-yellow-600 text-black rounded-full">
                           85% financé
                         </span>
                       </div>
@@ -89,8 +93,8 @@ const Hero = () => {
                   </div>
                 </div>
               ))}
-              <div className="p-4 text-center">
-                <Link to="/projects" className="text-sm font-medium text-tokponla-primary hover:underline">
+              <div className="p-4 text-center bg-yellow-600">
+                <Link to="/projects" className="text-sm font-medium text-tokponla-dark hover:underline">
                   Voir tous les projets
                 </Link>
               </div>

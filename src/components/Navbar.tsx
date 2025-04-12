@@ -1,8 +1,8 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Moon, Sun, Menu, X, Bell, Search } from "lucide-react";
 import { Link } from "react-router-dom";
+import logo from '../assets/LOGo tokponlaEngagé.png'
 
 interface NavbarProps {
   toggleDarkMode: () => void;
@@ -17,109 +17,124 @@ const Navbar = ({ toggleDarkMode, isDarkMode }: NavbarProps) => {
   };
 
   return (
-    <nav className="bg-background border-b border-border sticky top-0 z-50">
+    <nav className="bg-gradient-to-r from-blue-950 via-blue-700 to-blue-500 border-b border-border sticky top-0 z-50 shadow-md">
       <div className="tokponla-container py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
+        <div className="flex justify-between items-center">
+          {/* Logo + Desktop Nav */}
+          <div className="flex items-center space-x-8">
             <Link to="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-tokponla-primary to-tokponla-accent flex items-center justify-center">
-                <span className="text-white font-bold">TE</span>
+              <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-full shadow-lg">
+                <img src={logo} alt="Logo" className="rounded-full w-full h-full object-cover" />
               </div>
-              <span className="font-bold text-xl hidden sm:inline-block">TokponlaEngagé</span>
+              <span className="font-bold text-lg sm:text-2xl hidden sm:inline-block text-yellow-600">
+                TokponlaEngagé
+              </span>
             </Link>
-          </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
-            <Link to="/projects" className="text-foreground hover:text-tokponla-primary transition-colors">
-              Projets
-            </Link>
-            <Link to="/create-project" className="text-foreground hover:text-tokponla-primary transition-colors">
-              Proposer un projet
-            </Link>
-            <Link to="/about" className="text-foreground hover:text-tokponla-primary transition-colors">
-              À propos
-            </Link>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={16} />
-              <input
-                type="text"
-                placeholder="Rechercher..."
-                className="pl-9 pr-4 py-2 text-sm rounded-full border border-input bg-background"
-              />
+            {/* Desktop Links */}
+            <div className="hidden md:flex items-center space-x-4">
+              <Link to="/projects">
+                <Button variant="ghost" className="text-foreground hover:text-tokponla-primary hover:bg-tokponla-primary/10 rounded-md px-3 py-3 font-medium">
+                  Projets
+                </Button>
+              </Link>
+              <Link to="/create-project">
+                <Button variant="ghost" className="text-foreground hover:text-tokponla-primary hover:bg-tokponla-primary/10 rounded-md px-3 py-3 font-medium">
+                  Proposer un projet
+                </Button>
+              </Link>
+              <Link to="/about">
+                <Button variant="ghost" className="text-foreground hover:text-tokponla-primary hover:bg-tokponla-primary/10 rounded-md px-3 py-3 font-medium">
+                  À propos
+                </Button>
+              </Link>
+              <div className="relative ml-1 hidden sm:block">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={18} />
+                <input
+                  type="text"
+                  placeholder="Rechercher..."
+                  className="pl-12 pr-6 py-2 text-sm rounded-lg border border-input bg-background hover:border-tokponla-primary/50 focus:border-tokponla-primary focus:ring-2 focus:ring-tokponla-primary/30 transition-all"
+                />
+              </div>
             </div>
           </div>
 
-          <div className="flex items-center space-x-2">
+          {/* Right icons + buttons */}
+          <div className="flex items-center space-x-4">
             <Button
               variant="ghost"
               size="icon"
               onClick={toggleDarkMode}
-              className="text-foreground"
+              className="text-foreground hover:bg-muted rounded-md"
             >
-              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+              {isDarkMode ? <Sun size={22} /> : <Moon size={22} />}
             </Button>
-            <Button variant="ghost" size="icon" className="text-foreground">
-              <Bell size={20} />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-foreground hover:bg-muted rounded-md relative"
+            >
+              <Bell size={22} />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
             </Button>
             <Link to="/login">
-              <Button variant="default" className="bg-tokponla-primary hover:bg-tokponla-primary/90">
+              <Button
+                variant="default"
+                className="bg-blue-950 hover:bg-tokponla-primary/90 rounded-md px-4 sm:px-6 py-3 font-medium shadow-lg"
+              >
                 Connexion
               </Button>
             </Link>
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="md:hidden hover:bg-muted rounded-md"
               onClick={toggleMenu}
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </Button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden mt-4 py-4 border-t border-border">
+          <div className="md:hidden mt-4 py-4 border-t border-border bg-background shadow-md">
             <div className="flex flex-col space-y-4">
-              <Link
-                to="/projects"
-                className="text-foreground hover:text-tokponla-primary transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Projets
+              <Link to="/projects" onClick={() => setIsMenuOpen(false)}>
+                <Button variant="ghost" className="w-full text-left justify-start text-foreground hover:text-tokponla-primary hover:bg-tokponla-primary/10 rounded-md py-3 font-medium">
+                  Projets
+                </Button>
               </Link>
-              <Link
-                to="/create-project"
-                className="text-foreground hover:text-tokponla-primary transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Proposer un projet
+              <Link to="/create-project" onClick={() => setIsMenuOpen(false)}>
+                <Button variant="ghost" className="w-full text-left justify-start text-foreground hover:text-tokponla-primary hover:bg-tokponla-primary/10 rounded-md py-3 font-medium">
+                  Proposer un projet
+                </Button>
               </Link>
-              <Link
-                to="/about"
-                className="text-foreground hover:text-tokponla-primary transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                À propos
+              <Link to="/about" onClick={() => setIsMenuOpen(false)}>
+                <Button variant="ghost" className="w-full text-left justify-start text-foreground hover:text-tokponla-primary hover:bg-tokponla-primary/10 rounded-md py-3 font-medium">
+                  À propos
+                </Button>
               </Link>
-              <div className="relative mt-2">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={16} />
+              <div className="relative mt-3">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={18} />
                 <input
                   type="text"
                   placeholder="Rechercher..."
-                  className="w-full pl-9 pr-4 py-2 text-sm rounded-full border border-input bg-background"
+                  className="w-full pl-10 pr-6 py-3 text-sm rounded-lg border border-input bg-background hover:border-tokponla-primary/50 focus:border-tokponla-primary focus:ring-2 focus:ring-tokponla-primary/30 transition-all"
                 />
               </div>
-              <Link 
-                to="/register" 
-                className="mt-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <Button variant="outline" className="w-full">
-                  S'inscrire
-                </Button>
-              </Link>
+              <div className="mt-5 grid grid-cols-2 gap-4">
+                <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="default" className="w-full bg-tokponla-primary hover:bg-tokponla-primary/90 rounded-md px-6 py-3 font-medium shadow-lg">
+                    Connexion
+                  </Button>
+                </Link>
+                <Link to="/register" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="outline" className="w-full border-tokponla-primary text-tokponla-primary hover:bg-tokponla-primary/10 rounded-md px-6 py-3 font-medium">
+                    S'inscrire
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         )}

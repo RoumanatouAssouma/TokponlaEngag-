@@ -1,44 +1,78 @@
-
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Instagram, Linkedin, Github } from "lucide-react";
+import logo from '../assets/LOGo tokponlaEngagé.png'
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaGithub } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="bg-card border-t border-border">
+    <footer className="bg-blue-950 text-white border-t border-border">
       <div className="tokponla-container py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-tokponla-primary to-tokponla-accent flex items-center justify-center">
-                <span className="text-white font-bold">TE</span>
+              <div className="w-14 h-10 rounded-full flex items-center justify-center">
+                <img src={logo} alt="Logo" className="rounded-full" />
               </div>
               <span className="font-bold text-xl">TokponlaEngagé</span>
             </div>
-            <p className="text-muted-foreground mb-4">
+            <p className="text-muted-foreground mb-4 text-white">
               Une plateforme intelligente pour la coaction urbaine en Afrique, propulsée par l'IA pour l'engagement citoyen.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="text-muted-foreground hover:text-tokponla-primary">
-                <Facebook size={20} />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-tokponla-primary">
-                <Twitter size={20} />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-tokponla-primary">
-                <Instagram size={20} />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-tokponla-primary">
-                <Linkedin size={20} />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-tokponla-primary">
-                <Github size={20} />
-              </a>
-            </div>
+            <div className="flex space-x-4 hover:text-white">
+                  <a
+                    href="https://www.facebook.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-pink-600"
+                  >
+                    <FaFacebook size={24} />
+                    <span>Facebook</span>
+                  </a>
+            
+                  <a
+                    href="https://www.twitter.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-pink-600"
+                  >
+                    <FaTwitter size={24} />
+                    <span>Twitter</span>
+                  </a>
+            
+                  <a
+                    href="https://www.instagram.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-pink-600"
+                  >
+                    <FaInstagram size={24} />
+                    <span>Instagram</span>
+                  </a>
+            
+                  <a
+                    href="https://www.linkedin.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-pink-600"
+                  >
+                    <FaLinkedin size={24} />
+                    <span>LinkedIn</span>
+                  </a>
+            
+                  <a
+                    href="https://www.github.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-pink-600"
+                  >
+                    <FaGithub size={24} />
+                    <span>GitHub</span>
+                  </a>
+                </div>
           </div>
 
           <div>
             <h3 className="font-semibold text-lg mb-4">Liens rapides</h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2 text-white hover:text-pink-600">
               <li>
                 <Link to="/projects" className="text-muted-foreground hover:text-tokponla-primary">
                   Projets
@@ -56,7 +90,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link to="/contact" className="text-muted-foreground hover:text-tokponla-primary">
-                  Contact
+                   Contact
                 </Link>
               </li>
             </ul>

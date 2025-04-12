@@ -306,7 +306,7 @@ const ProjectDetail = () => {
 
               {/* Onglets d'information */}
               <Tabs defaultValue="description" className="w-full">
-                <TabsList className="w-full">
+                <TabsList className="w-full bg-yellow-600 text-white">
                   <TabsTrigger value="description" className="flex-1">Description</TabsTrigger>
                   <TabsTrigger value="updates" className="flex-1">Mises à jour</TabsTrigger>
                   <TabsTrigger value="documents" className="flex-1">Documents</TabsTrigger>
@@ -367,7 +367,7 @@ const ProjectDetail = () => {
                               <p className="font-medium">{doc.name}</p>
                               <p className="text-xs text-muted-foreground">{doc.size}</p>
                             </div>
-                            <Button variant="outline" size="sm">
+                            <Button variant="outline" size="sm" className="bg-yellow-600">
                               Télécharger
                             </Button>
                           </div>

@@ -16,13 +16,13 @@ const DashboardPreviews = () => {
         </div>
 
         <Tabs defaultValue="citizen" className="max-w-4xl mx-auto">
-          <TabsList className="grid w-full grid-cols-3 mb-8">
+          <TabsList className="grid text-black w-full grid-cols-3 mb-8 bg-yellow-600">
             <TabsTrigger value="citizen">Citoyen</TabsTrigger>
             <TabsTrigger value="ngo">ONG</TabsTrigger>
             <TabsTrigger value="admin">Administrateur</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="citizen" className="mt-4">
+          <TabsContent value="citizen" className="mt-4 bg-">
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle>Tableau de bord citoyen</CardTitle>

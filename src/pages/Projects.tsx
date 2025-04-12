@@ -151,12 +151,12 @@ const Projects = () => {
               <p className="text-muted-foreground">Découvrez et soutenez des initiatives locales à fort impact</p>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline">
+              <Button variant="outline" className="bg-yellow-600">
                 <Filter size={18} className="mr-2" />
                 Filtrer
               </Button>
               <Link to="/create-project">
-                <Button className="bg-tokponla-primary hover:bg-tokponla-primary/90">
+                <Button className="bg-blue-950 hover:bg-tokponla-primary/90">
                   Proposer un projet
                 </Button>
               </Link>
@@ -177,7 +177,7 @@ const Projects = () => {
           </div>
 
           <Tabs defaultValue="all" className="mb-6">
-            <TabsList className="mb-6">
+            <TabsList className="mb-6 bg-yellow-600 text-white">
               <TabsTrigger value="all">Tous les projets</TabsTrigger>
               <TabsTrigger value="popular">Populaires</TabsTrigger>
               <TabsTrigger value="urgent">Urgents</TabsTrigger>
@@ -185,12 +185,12 @@ const Projects = () => {
             </TabsList>
 
             <div className="flex justify-end mb-4">
-              <div className="inline-flex border rounded-md p-1">
+              <div className="inline-flex border rounded-md p-1 bg-yellow-600">
                 <Button 
                   variant={currentView === "list" ? "default" : "ghost"} 
                   size="sm" 
                   onClick={() => setCurrentView("list")}
-                  className={currentView === "list" ? "bg-tokponla-primary hover:bg-tokponla-primary/90" : ""}
+                  className={currentView === "list" ? "bg-blue-950 hover:bg-tokponla-primary/90" : ""}
                 >
                   Liste
                 </Button>
@@ -198,7 +198,7 @@ const Projects = () => {
                   variant={currentView === "map" ? "default" : "ghost"} 
                   size="sm" 
                   onClick={() => setCurrentView("map")}
-                  className={currentView === "map" ? "bg-tokponla-primary hover:bg-tokponla-primary/90" : ""}
+                  className={currentView === "map" ? "bg-blue-950 hover:bg-tokponla-primary/90" : ""}
                 >
                   Carte
                 </Button>
@@ -233,19 +233,19 @@ const Projects = () => {
                           <span className="mx-2">•</span>
                           <span>{project.category}</span>
                         </div>
-                        <Link to={`/projects/${project.id}`} className="hover:text-tokponla-primary transition-colors">
-                          <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+                        <Link to={`/projects/${project.id}`} className="text-blue-600 hover:text-tokponla-primary transition-colors">
+                          <h3 className="text-xl font-semibold mb-2 ">{project.title}</h3>
                         </Link>
                         <p className="text-muted-foreground mb-4 flex-grow">{project.description}</p>
                         
-                        <div className="mb-4">
+                        <div className="mb-4 ">
                           <div className="flex justify-between text-sm mb-1">
                             <span className="font-medium">{formatAmount(project.raisedAmount)}</span>
                             <span className="text-muted-foreground">{formatAmount(project.goalAmount)}</span>
                           </div>
                           <div className="w-full bg-muted rounded-full h-2.5">
                             <div 
-                              className="bg-tokponla-primary h-2.5 rounded-full" 
+                              className="bg-yellow-600 h-2.5 rounded-full" 
                               style={{ width: `${calculateProgress(project.raisedAmount, project.goalAmount)}%` }}
                             ></div>
                           </div>
@@ -264,7 +264,7 @@ const Projects = () => {
                         
                         <div className="flex space-x-2">
                           <Link to={`/projects/${project.id}`} className="flex-grow">
-                            <Button className="w-full bg-tokponla-primary hover:bg-tokponla-primary/90">
+                            <Button className="w-full bg-blue-950 hover:bg-tokponla-primary/90">
                               Contribuer
                             </Button>
                           </Link>

@@ -53,7 +53,7 @@ const ChatbotAssistant = () => {
     <>
       {/* Chatbot Button */}
       <Button
-        className="fixed bottom-6 right-6 rounded-full h-14 w-14 p-0 shadow-lg bg-tokponla-primary hover:bg-tokponla-primary/90"
+        className="fixed bottom-6 right-6 rounded-full h-14 w-14 p-0 shadow-lg bg-blue-950 hover:bg-tokponla-primary/90"
         onClick={toggleChatbot}
       >
         {isOpen ? (
@@ -66,7 +66,7 @@ const ChatbotAssistant = () => {
       {/* Chatbot Dialog */}
       {isOpen && (
         <Card className="fixed bottom-24 right-6 w-[350px] max-w-[calc(100vw-3rem)] h-[450px] max-h-[70vh] shadow-xl flex flex-col rounded-xl border border-border overflow-hidden z-50">
-          <div className="bg-tokponla-primary text-white p-3 flex justify-between items-center">
+          <div className="bg-blue-950 text-white p-3 flex justify-between items-center">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
                 <MessageSquare size={16} />
@@ -94,7 +94,7 @@ const ChatbotAssistant = () => {
                 <div
                   className={`max-w-[80%] p-3 rounded-lg ${
                     message.sender === "user"
-                      ? "bg-tokponla-primary text-white rounded-tr-none"
+                      ? "bg-blue-600 text-white rounded-tr-none"
                       : "bg-muted rounded-tl-none"
                   }`}
                 >

@@ -601,7 +601,7 @@ const CreateProject = () => {
                   </div>
 
                   <div className="flex justify-end">
-                    <Button type="submit" className="bg-tokponla-primary hover:bg-tokponla-primary/90">
+                    <Button type="submit" className="bg-blue-950 hover:bg-tokponla-primary/90">
                       Soumettre le projet
                     </Button>
                   </div>
